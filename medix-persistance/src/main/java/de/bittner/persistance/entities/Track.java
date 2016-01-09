@@ -1,4 +1,4 @@
-package de.bittner.medix.entities;
+package de.bittner.persistance.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,13 +13,28 @@ import org.hibernate.annotations.GenericGenerator;
 public class Track {
 
 	private Long id, track;
+
+	public Track() {
+
+	}
+
+	public Track(Long track, String title) {
+		super();
+		this.track = track;
+		this.title = title;
+	}
+
 	private String title;
 
 	@Id
-	@GeneratedValue(generator = "increment")
+	@GeneratedValue
 	@GenericGenerator(name = "increment", strategy = "increment")
 	public Long getId() {
 		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	@Column
@@ -27,8 +42,16 @@ public class Track {
 		return track;
 	}
 
+	public void setTrack(Long track) {
+		this.track = track;
+	}
+
 	@Column
 	public String getTitle() {
 		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 }

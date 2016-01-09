@@ -10,7 +10,8 @@
 <modules>
     <module>medix-web</module>
 <module>medix-schema-evolution</module>
-  </modules>
+  <module>medix-persistance</module>
+</modules>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
