@@ -9,6 +9,7 @@
 	<url>http://maven.apache.org</url>
 <modules>
     <module>medix-web</module>
+<module>medix-schema-evolution</module>
   </modules>
 	<dependencies>
 		<dependency>
