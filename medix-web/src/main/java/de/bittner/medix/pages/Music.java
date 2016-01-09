@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -17,6 +19,8 @@ import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.TagException;
 
 import de.bittner.medix.ui.BasePage;
+import de.bittner.persistance.MedixEntityManager;
+import de.bittner.persistance.entities.Track;
 
 public class Music extends BasePage {
 
@@ -30,7 +34,6 @@ public class Music extends BasePage {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-
 		String testFileUrl = "/home/wbittner/Musik/Bravo Hits, Vol. 91";
 		File dir = new File(testFileUrl);
 		List<File> fileList = Arrays.asList(dir.listFiles());
@@ -51,12 +54,18 @@ public class Music extends BasePage {
 
 			@Override
 			protected void populateItem(ListItem<File> file) {
+				EntityManager em = MedixEntityManager.getEntityManager();
 				try {
 					org.jaudiotagger.tag.Tag tag = getTagFromFile(file.getModelObject());
 					file.add(new Label("label", tag.getFirst(FieldKey.TRACK) + " - " + tag.getFirst(FieldKey.TITLE)));
+					em.getTransaction().begin();
+					em.persist(new Track(Long.decode(tag.getFirst(FieldKey.TRACK)), tag.getFirst(FieldKey.TITLE)));
+					em.getTransaction().commit();
 				} catch (CannotReadException | IOException | TagException | ReadOnlyFileException
 						| InvalidAudioFrameException e) {
 					e.printStackTrace();
+				} finally {
+					em.close();
 				}
 
 			}
